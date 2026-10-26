@@ -1,7 +1,7 @@
-# Miembros del Proyecto
+# Gamer Republic
 ## Miembros:
 
-* **Maximo Hevia** - [LinkedIn](https://www.linkedin.com/in/max-hevia)
-* **Lucas Dueñaz** - [LinkedIn](https://www.linkedin.com/in/lucasdue%C3%B1az/)
-* **Tomás Goldentul** - [LinkedIn](https://www.linkedin.com/in/tomas-goldentul)
-* **Tobías Nul** - [LinkedIn](https://www.linkedin.com/in/tob%C3%ADas-nul/)
+* **Maximo Hevia** - Fullstack - [LinkedIn](https://www.linkedin.com/in/max-hevia)
+* **Lucas Dueñaz** - Fullstack - [LinkedIn](https://www.linkedin.com/in/lucasdue%C3%B1az/)
+* **Tomás Goldentul** - Fullstack - [LinkedIn](https://www.linkedin.com/in/tomas-goldentul)
+* **Tobías Nul** - Fullstack - [LinkedIn](https://www.linkedin.com/in/tob%C3%ADas-nul/)
