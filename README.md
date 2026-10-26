@@ -1,5 +1,5 @@
-## Miembros del Proyecto
-# Miembros:
+# Miembros del Proyecto
+## Miembros:
 
 * **Maximo Hevia** - [LinkedIn](https://www.linkedin.com/in/max-hevia)
 * **Lucas Dueñaz** - [LinkedIn](https://www.linkedin.com/in/lucasdue%C3%B1az/)
