@@ -1,11 +1,15 @@
-import dotenv from 'dotenv';
-dotenv.config();
-
+import 'dotenv/config';
 export const dbConfig = {
   host: process.env.DB_HOST || 'localhost',
   port: Number(process.env.DB_PORT) || 5432,
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  ssl: process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : false
+  ssl:
+    process.env.DB_SSL === 'true'
+      ? {
+          rejectUnauthorized: true,
+          ...(process.env.DB_CA_CERT ? { ca: process.env.DB_CA_CERT.replace(/\\n/g, '\n') } : {}),
+        }
+      : false,
 };

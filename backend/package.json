@@ -1,22 +1,26 @@
 {
-  "name": "backend",
+  "name": "gamer-republic-api",
   "version": "1.0.0",
-  "description": "",
-  "license": "ISC",
-  "author": "",
+  "private": true,
   "type": "module",
-  "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node src/index.js",
-    "server": "node src/index.js"
+    "dev": "node --watch src/index.js",
+    "server": "node src/index.js",
+    "migrate": "node src/database/migrate.js",
+    "seed": "node src/database/seed.js",
+    "test": "node --test test/api.test.js test/stats.test.js test/seed.test.js",
+    "db:create": "node scripts/create-database.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "cors": "^2.8.6",
-    "dotenv": "^18.0.9",
-    "express": "^5.3.0",
-    "jsonwebtoken": "^9.0.3",
-    "pg": "^8.23.1"
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.16.3"
+  },
+  "devDependencies": {
+    "@electric-sql/pglite": "^0.5.14"
   }
 }

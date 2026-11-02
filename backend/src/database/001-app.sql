@@ -1,0 +1,18 @@
+BEGIN;
+CREATE TABLE IF NOT EXISTS usuarios ("idUsuario" integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, username varchar(40) UNIQUE NOT NULL, email varchar(255) UNIQUE NOT NULL, "passwordHash" text NOT NULL, "nombreCompleto" varchar(120), "fotoPerfil" text, biografia text, "fechaCreacion" timestamptz NOT NULL DEFAULT now());
+ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS preferencias text[] NOT NULL DEFAULT '{}';
+CREATE TABLE IF NOT EXISTS videojuegos ("idVideojuego" integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "proveedorApi" varchar(50) NOT NULL, "idExterno" varchar(100) NOT NULL, titulo varchar(255) NOT NULL, descripcion text, "portadaUrl" text, "fechaLanzamiento" date, desarrolladora varchar(255), publisher varchar(255), "puntuacionApi" numeric(4,2), "fechaActualizacionApi" timestamptz, UNIQUE ("proveedorApi","idExterno"));
+ALTER TABLE videojuegos ADD COLUMN IF NOT EXISTS generos text[] NOT NULL DEFAULT '{}';
+ALTER TABLE videojuegos ADD COLUMN IF NOT EXISTS plataformas text[] NOT NULL DEFAULT '{}';
+ALTER TABLE videojuegos ADD COLUMN IF NOT EXISTS imagen text;
+CREATE TABLE IF NOT EXISTS biblioteca ("idUsuario" integer REFERENCES usuarios ON DELETE CASCADE, "idVideojuego" integer REFERENCES videojuegos ON DELETE CASCADE, "fechaAgregado" timestamptz NOT NULL DEFAULT now(), "esFavorito" boolean NOT NULL DEFAULT false, PRIMARY KEY ("idUsuario","idVideojuego"));
+ALTER TABLE biblioteca ADD COLUMN IF NOT EXISTS estado text NOT NULL DEFAULT 'Quiero jugar' CHECK (estado IN ('Quiero jugar','Jugando','Terminado','Abandonado'));
+ALTER TABLE biblioteca ADD COLUMN IF NOT EXISTS puntuacion integer CHECK (puntuacion BETWEEN 1 AND 10);
+ALTER TABLE biblioteca ADD COLUMN IF NOT EXISTS resena text NOT NULL DEFAULT '';
+ALTER TABLE biblioteca ADD COLUMN IF NOT EXISTS horas numeric(8,1) NOT NULL DEFAULT 0 CHECK (horas >= 0);
+CREATE TABLE IF NOT EXISTS colecciones ("idColeccion" integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "idUsuario" integer NOT NULL REFERENCES usuarios ON DELETE CASCADE, nombre varchar(100) NOT NULL, descripcion text, "portadaUrl" text, "esPublica" boolean NOT NULL DEFAULT false, "fechaCreacion" timestamptz NOT NULL DEFAULT now());
+CREATE TABLE IF NOT EXISTS "coleccionesVideojuegos" ("idColeccion" integer REFERENCES colecciones ON DELETE CASCADE, "idVideojuego" integer REFERENCES videojuegos ON DELETE CASCADE, "fechaAgregado" timestamptz NOT NULL DEFAULT now(), posicion integer NOT NULL DEFAULT 0, PRIMARY KEY ("idColeccion","idVideojuego"));
+CREATE TABLE IF NOT EXISTS actividad ("idActividad" bigint GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "idUsuario" integer NOT NULL REFERENCES usuarios ON DELETE CASCADE, tipo varchar(40) NOT NULL, "idVideojuego" integer REFERENCES videojuegos ON DELETE SET NULL, "idColeccion" integer REFERENCES colecciones ON DELETE SET NULL, fecha timestamptz NOT NULL DEFAULT now(), detalle jsonb NOT NULL DEFAULT '{}');
+ALTER TABLE actividad DROP CONSTRAINT IF EXISTS actividad_tipo_check;
+CREATE INDEX IF NOT EXISTS actividad_usuario_fecha ON actividad ("idUsuario",fecha DESC);
+COMMIT;
