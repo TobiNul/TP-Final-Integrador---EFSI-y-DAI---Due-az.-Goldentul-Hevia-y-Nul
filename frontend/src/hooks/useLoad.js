@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+
 export function useLoad(loader) {
   const [data, setData] = useState(null),
     [error, setError] = useState(''),

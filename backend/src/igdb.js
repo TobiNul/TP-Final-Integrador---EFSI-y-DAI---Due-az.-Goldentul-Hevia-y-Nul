@@ -1,10 +1,14 @@
 import { fail, id } from './errors.js';
+
 let access,
   expiration = 0,
   pending;
 const cache = new Map();
+
 let queue = Promise.resolve();
+
 let lastRequest = 0;
+
 async function token() {
   if (access && Date.now() < expiration) return access;
   if (!pending)
@@ -30,6 +34,7 @@ async function token() {
     });
   return pending;
 }
+
 async function request(body) {
   const run = queue
     .catch(() => {})
@@ -62,6 +67,7 @@ async function request(body) {
   queue = run;
   return run;
 }
+
 export function normalize(game) {
   const image = (url, size) =>
     url ? ('https:' + url.replace(/^https?:/, '')).replace('t_thumb', size) : null;
@@ -83,8 +89,10 @@ export function normalize(game) {
       .join(', '),
   };
 }
+
 const fields =
   'fields name,summary,cover.url,screenshots.url,genres.name,platforms.name,first_release_date,total_rating,involved_companies.developer,involved_companies.company.name;';
+
 export async function games({ q = '', sort = 'rating', genre = '', page = 1 } = {}) {
   if (typeof q !== 'string' || q.length > 100)
     fail(400, 'La búsqueda admite hasta 100 caracteres.');
@@ -114,6 +122,7 @@ export async function games({ q = '', sort = 'rating', genre = '', page = 1 } = 
   cache.set(body, { data, expires: Date.now() + 300000 });
   return data;
 }
+
 export async function game(idValue) {
   const data = await request(fields + 'where id = ' + id(idValue) + '; limit 1;');
   if (!data[0]) fail(404, 'No encontramos ese juego en IGDB.');

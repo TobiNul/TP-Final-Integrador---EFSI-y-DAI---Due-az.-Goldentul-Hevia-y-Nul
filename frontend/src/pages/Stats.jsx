@@ -2,6 +2,7 @@ import { Trophy, Gamepad2, Clock3, Heart, Star, Layers, MessageSquare, Target } 
 import { personalService } from '../services/api';
 import { useLoad } from '../hooks/useLoad';
 import { PageTitle, ErrorBox, Loading, Empty } from '../components/UI';
+
 export default function Stats() {
   const { data: s, error, loading, reload } = useLoad(personalService.stats);
   if (error) return <ErrorBox message={error} retry={reload} />;
@@ -16,6 +17,7 @@ export default function Stats() {
     [MessageSquare, s.reviews, 'Reseñas escritas'],
     [Target, s.completion + '%', 'Biblioteca completada'],
   ];
+  
   return (
     <>
       <PageTitle

@@ -1,6 +1,7 @@
 import { NavLink, Link, Outlet } from 'react-router-dom';
 import { UserRound } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
+
 const nav = [
   ['/', 'Home'],
   ['/explorar', 'Buscador'],
@@ -8,6 +9,7 @@ const nav = [
   ['/colecciones', 'Colecciones'],
   ['/estadisticas', 'Estadísticas'],
 ];
+
 export default function Layout() {
   const { user } = useAuth();
   return (

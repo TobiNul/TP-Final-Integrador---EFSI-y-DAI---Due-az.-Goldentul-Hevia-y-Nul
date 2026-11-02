@@ -3,9 +3,12 @@ import { pool, transaction, activity } from './database/pool.js';
 import { fail, id, text } from './errors.js';
 import { game } from './igdb.js';
 import { statistics } from './stats.js';
+
 export const library = Router();
+
 export const gameFields =
   'v."idVideojuego" AS id,v."idExterno",v.titulo,v.descripcion,v."portadaUrl",v.imagen,v.generos,v.plataformas,v."fechaLanzamiento",v."puntuacionApi",v.desarrolladora';
+
 export async function items(user) {
   return (
     await pool.query(
@@ -16,6 +19,7 @@ export async function items(user) {
     )
   ).rows;
 }
+
 export async function saveGame(db, g) {
   const { rows } = await db.query(
     'INSERT INTO videojuegos ("proveedorApi","idExterno",titulo,descripcion,"portadaUrl",imagen,generos,plataformas,"fechaLanzamiento","puntuacionApi",desarrolladora) VALUES (\'igdb\',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT ("proveedorApi","idExterno") DO UPDATE SET titulo=EXCLUDED.titulo, descripcion=EXCLUDED.descripcion,"portadaUrl"=EXCLUDED."portadaUrl",imagen=EXCLUDED.imagen,generos=EXCLUDED.generos,plataformas=EXCLUDED.plataformas RETURNING "idVideojuego"',
@@ -34,7 +38,9 @@ export async function saveGame(db, g) {
   );
   return rows[0].idVideojuego;
 }
+
 library.get('/library', async (req, res) => res.json(await items(req.user)));
+
 library.post('/library', async (req, res) => {
   const g = await game(id(req.body.igdbId));
   const created = await transaction(async (db) => {
@@ -49,6 +55,7 @@ library.post('/library', async (req, res) => {
   });
   res.status(201).json({ id: created });
 });
+
 library.patch('/library/:id', async (req, res) => {
   const gameId = id(req.params.id);
   const { estado, esFavorito, puntuacion, resena, horas } = req.body;
@@ -80,6 +87,7 @@ library.patch('/library/:id', async (req, res) => {
   });
   res.sendStatus(204);
 });
+
 library.delete('/library/:id', async (req, res) => {
   const gameId = id(req.params.id);
   await transaction(async (db) => {
@@ -96,6 +104,7 @@ library.delete('/library/:id', async (req, res) => {
   });
   res.sendStatus(204);
 });
+
 library.get('/stats', async (req, res) => {
   const { rows } = await pool.query(
     'SELECT count(*)::int AS total FROM colecciones WHERE "idUsuario"=$1',
@@ -103,6 +112,7 @@ library.get('/stats', async (req, res) => {
   );
   res.json(statistics(await items(req.user), rows[0].total));
 });
+
 library.get('/activity', async (req, res) => {
   const { rows } = await pool.query(
     'SELECT * FROM actividad WHERE "idUsuario"=$1 ORDER BY fecha DESC,"idActividad" DESC LIMIT 100',

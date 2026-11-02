@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ArrowUpRight, Gamepad2, Heart, Search, AlertCircle, LoaderCircle } from 'lucide-react';
 import { states } from '../constants';
+
 export function Loading() {
   return (
     <div className="empty" role="status">
@@ -9,6 +10,7 @@ export function Loading() {
     </div>
   );
 }
+
 export function ErrorBox({ message, retry }) {
   return (
     <div className="error" role="alert">
@@ -18,6 +20,7 @@ export function ErrorBox({ message, retry }) {
     </div>
   );
 }
+
 export function Empty({
   title = 'Todavía no hay juegos por acá',
   text = 'Explorá el catálogo y empezá tu colección.',
@@ -37,6 +40,7 @@ export function Empty({
     </div>
   );
 }
+
 export function PageTitle({ eyebrow = 'TU UNIVERSO GAMER', title, description, children }) {
   return (
     <div className="page-title">
@@ -52,6 +56,7 @@ export function PageTitle({ eyebrow = 'TU UNIVERSO GAMER', title, description, c
     </div>
   );
 }
+
 export function Cover({ src, title, className = '' }) {
   return src ? (
     <img
@@ -69,6 +74,7 @@ export function Cover({ src, title, className = '' }) {
     </div>
   );
 }
+
 export function GameCard({ game, children }) {
   const href = '/juego/' + (game.idExterno || game.id);
   return (
@@ -107,6 +113,7 @@ export function GameCard({ game, children }) {
     </article>
   );
 }
+
 export function GameGrid({ games, children }) {
   return games.length ? (
     <div className="game-grid">
@@ -120,6 +127,7 @@ export function GameGrid({ games, children }) {
     <Empty />
   );
 }
+
 export function SectionTitle({ title, to, label = 'Ver todos' }) {
   return (
     <div className="section-title">
@@ -133,6 +141,7 @@ export function SectionTitle({ title, to, label = 'Ver todos' }) {
     </div>
   );
 }
+
 export function ActivityList({ items, limit = 10 }) {
   const labels = {
     juego_agregado: 'Agregaste un juego a tu biblioteca',

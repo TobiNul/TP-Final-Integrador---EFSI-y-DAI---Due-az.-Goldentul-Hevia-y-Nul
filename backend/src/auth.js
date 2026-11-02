@@ -3,9 +3,13 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import { pool } from './database/pool.js';
 import { fail, text, webUrl } from './errors.js';
+
 export const auth = Router();
+
 const fields = '"idUsuario",username,email,"nombreCompleto","fotoPerfil",biografia,preferencias';
+
 const cookieName = 'gr_session';
+
 function cookies(req) {
   return Object.fromEntries(
     (req.headers.cookie || '')
@@ -17,6 +21,7 @@ function cookies(req) {
       }),
   );
 }
+
 const cookieOptions = () => ({
   httpOnly: true,
   secure: process.env.NODE_ENV === 'production',
@@ -24,6 +29,7 @@ const cookieOptions = () => ({
   path: '/',
   maxAge: 7 * 24 * 60 * 60 * 1000,
 });
+
 export function requireAuth(req, res, next) {
   try {
     req.user = Number(
@@ -35,6 +41,7 @@ export function requireAuth(req, res, next) {
     res.status(401).json({ message: 'Tu sesión venció. Volvé a iniciar sesión.' });
   }
 }
+
 function session(res, user) {
   const token = jwt.sign({}, process.env.JWT_SECRET, {
     subject: String(user.idUsuario),
@@ -43,6 +50,7 @@ function session(res, user) {
   });
   res.cookie(cookieName, token, cookieOptions()).json(user);
 }
+
 auth.post('/register', async (req, res) => {
   const username = text(req.body.username, 40, true),
     email = text(req.body.email, 255, true).toLowerCase();
@@ -61,6 +69,7 @@ auth.post('/register', async (req, res) => {
   res.status(201);
   session(res, rows[0]);
 });
+
 auth.post('/login', async (req, res) => {
   const email = text(req.body.email, 255, true).toLowerCase(),
     password = text(req.body.password, 72, true);
@@ -76,9 +85,11 @@ auth.post('/login', async (req, res) => {
   );
   session(res, users[0]);
 });
+
 auth.post('/logout', (_req, res) => {
   res.clearCookie(cookieName, { ...cookieOptions(), maxAge: undefined }).sendStatus(204);
 });
+
 auth.get('/me', requireAuth, async (req, res) => {
   const { rows } = await pool.query('SELECT ' + fields + ' FROM usuarios WHERE "idUsuario"=$1', [
     req.user,
@@ -86,6 +97,7 @@ auth.get('/me', requireAuth, async (req, res) => {
   if (!rows[0]) fail(401, 'La cuenta ya no está disponible.');
   res.json(rows[0]);
 });
+
 auth.patch('/me', requireAuth, async (req, res) => {
   const name = text(req.body.nombreCompleto, 120),
     bio = text(req.body.biografia, 1000);

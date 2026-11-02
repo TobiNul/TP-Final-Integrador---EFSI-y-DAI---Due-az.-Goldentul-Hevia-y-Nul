@@ -12,8 +12,10 @@ import {
   SectionTitle,
   ActivityList,
 } from '../components/UI';
+
 const load = () =>
   Promise.all([personalService.library(), personalService.activity(), personalService.stats()]);
+
 export default function Profile() {
   const navigate = useNavigate();
   const { user, update, logout } = useAuth(),
@@ -54,6 +56,7 @@ export default function Profile() {
       setBusy(false);
     }
   }
+  
   return (
     <>
       <PageTitle title="Mi perfil" description="El jugador detrás de cada aventura." />

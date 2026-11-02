@@ -4,15 +4,19 @@ import { Plus, Layers, ArrowUpRight, ArrowLeft, Trash2, Pencil } from 'lucide-re
 import { personalService } from '../services/api';
 import { useLoad } from '../hooks/useLoad';
 import { PageTitle, ErrorBox, Loading, GameGrid, Cover, Empty } from '../components/UI';
+
 const load = () => Promise.all([personalService.collections(), personalService.library()]);
+
 export default function Collections() {
   const { id } = useParams(),
     navigate = useNavigate(),
     { data, error, loading, reload } = useLoad(load);
+  
   const [form, setForm] = useState(false),
     [editing, setEditing] = useState(null),
     [busy, setBusy] = useState(false),
     [message, setMessage] = useState('');
+  
   const [collections = [], games = []] = data || [],
     selected = id ? collections.find((c) => String(c.idColeccion) === id) : null;
   async function run(fn, done) {
@@ -28,6 +32,7 @@ export default function Collections() {
       setBusy(false);
     }
   }
+  
   function submit(e) {
     e.preventDefault();
     const values = Object.fromEntries(new FormData(e.currentTarget));
@@ -42,8 +47,10 @@ export default function Collections() {
       },
     );
   }
+  
   if (error) return <ErrorBox message={error} retry={reload} />;
   if (loading) return <Loading />;
+  
   if (id && !selected)
     return (
       <Empty
@@ -52,6 +59,7 @@ export default function Collections() {
         action={false}
       />
     );
+  
   return (
     <>
       {id && (
@@ -113,6 +121,7 @@ export default function Collections() {
           </div>
         </form>
       )}
+      
       {selected ? (
         <>
           <div className="filterbar">

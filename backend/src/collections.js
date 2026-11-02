@@ -1,7 +1,9 @@
 import { Router } from 'express';
 import { pool, transaction, activity } from './database/pool.js';
 import { fail, id, text } from './errors.js';
+
 export const collections = Router();
+
 collections.get('/', async (req, res) => {
   const { rows } = await pool.query(
     'SELECT c.*,COALESCE(array_agg(cv."idVideojuego") FILTER (WHERE cv."idVideojuego" IS NOT NULL),\'{}\') AS juegos FROM colecciones c LEFT JOIN "coleccionesVideojuegos" cv USING ("idColeccion") WHERE c."idUsuario"=$1 GROUP BY c."idColeccion" ORDER BY c."fechaCreacion" DESC',
@@ -9,6 +11,7 @@ collections.get('/', async (req, res) => {
   );
   res.json(rows);
 });
+
 collections.post('/', async (req, res) => {
   const name = text(req.body.nombre, 100, true),
     description = text(req.body.descripcion || '', 1000);
@@ -22,6 +25,7 @@ collections.post('/', async (req, res) => {
   });
   res.status(201).json(result);
 });
+
 collections.patch('/:id', async (req, res) => {
   const name = text(req.body.nombre, 100, true),
     description = text(req.body.descripcion || '', 1000);
@@ -35,6 +39,7 @@ collections.patch('/:id', async (req, res) => {
   });
   res.sendStatus(204);
 });
+
 collections.delete('/:id', async (req, res) => {
   await transaction(async (db) => {
     const { rows } = await db.query(
@@ -46,6 +51,7 @@ collections.delete('/:id', async (req, res) => {
   });
   res.sendStatus(204);
 });
+
 collections.put('/:id/games/:gameId', async (req, res) => {
   const collection = id(req.params.id),
     game = id(req.params.gameId);
@@ -71,6 +77,7 @@ collections.put('/:id/games/:gameId', async (req, res) => {
   });
   res.sendStatus(204);
 });
+
 collections.delete('/:id/games/:gameId', async (req, res) => {
   await transaction(async (db) => {
     const { rowCount } = await db.query(

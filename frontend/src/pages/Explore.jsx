@@ -4,24 +4,31 @@ import { Search, SlidersHorizontal, ArrowLeft, ArrowRight } from 'lucide-react';
 import { catalogService } from '../services/api';
 import { useLoad } from '../hooks/useLoad';
 import { PageTitle, ErrorBox, Loading, GameGrid, Empty } from '../components/UI';
+
 export default function Explore() {
+  
   const [params, setParams] = useSearchParams(),
     q = params.get('q') || '',
     genre = params.get('genre') || '',
     sort = params.get('sort') || 'rating',
     page = Number(params.get('page')) || 1;
+  
   const [query, setQuery] = useState(q);
+  
   const loader = useCallback(
     () => catalogService.list({ q, genre, sort, page }),
     [q, genre, sort, page],
   );
+  
   const { data, error, loading, reload } = useLoad(loader);
+  
   function change(key, value) {
     const next = new URLSearchParams(params);
     next.set(key, value);
     if (key !== 'page') next.delete('page');
     setParams(next);
   }
+  
   return (
     <>
       <PageTitle

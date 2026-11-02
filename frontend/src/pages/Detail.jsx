@@ -6,12 +6,14 @@ import { useAuth } from '../context/AuthContext';
 import { useLoad } from '../hooks/useLoad';
 import { catalogService, personalService } from '../services/api';
 import { Cover, ErrorBox, Loading } from '../components/UI';
+
 export default function Detail() {
   const { id } = useParams(),
     { user } = useAuth(),
     [busy, setBusy] = useState(false),
     [error, setError] = useState(''),
     [success, setSuccess] = useState('');
+  
   const loader = useCallback(async () => {
     const [library, collections] = await Promise.all([
       user ? personalService.library() : Promise.resolve([]),
@@ -23,11 +25,16 @@ export default function Detail() {
       : await catalogService.detail(id);
     return [game, library, collections];
   }, [id, user]);
+  
   const loaded = useLoad(loader);
+  
   if (loaded.error) return <ErrorBox message={loaded.error} retry={loaded.reload} />;
+  
   if (loaded.loading || !loaded.data) return <Loading />;
+  
   const [game, library, collections] = loaded.data,
     entry = library.find((g) => String(g.idExterno) === id);
+  
   async function action(fn, message) {
     setBusy(true);
     setError('');
@@ -42,6 +49,7 @@ export default function Detail() {
       setBusy(false);
     }
   }
+  
   function save(e) {
     e.preventDefault();
     const f = new FormData(e.currentTarget);
@@ -57,6 +65,7 @@ export default function Detail() {
       'Cambios guardados.',
     );
   }
+  
   return (
     <>
       <Link className="back-link" to="/explorar">

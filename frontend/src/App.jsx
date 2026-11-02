@@ -12,13 +12,16 @@ import Profile from './pages/Profile';
 import Activity from './pages/Activity';
 import Auth from './pages/Auth';
 import './App.css';
+
 function Protected() {
   const { user, loading } = useAuth(),
     location = useLocation();
   if (loading) return <Loading />;
   return user ? <Outlet /> : <Navigate to="/login" state={{ from: location.pathname }} replace />;
 }
+
 export default function App() {
+  
   return (
     <BrowserRouter>
       <AuthProvider>

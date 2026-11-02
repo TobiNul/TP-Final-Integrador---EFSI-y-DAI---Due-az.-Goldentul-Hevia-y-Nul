@@ -1,6 +1,9 @@
 export function statistics(items, collections = 0) {
+  
   const count = (state) => items.filter((item) => item.estado === state).length;
+  
   const rated = items.filter((item) => item.puntuacion !== null);
+  
   const ranking = (key) =>
     Object.entries(
       items.reduce((acc, item) => {
@@ -10,6 +13,7 @@ export function statistics(items, collections = 0) {
     )
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
+  
   return {
     total: items.length,
     completed: count('Terminado'),

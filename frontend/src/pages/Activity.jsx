@@ -1,8 +1,11 @@
 import { personalService } from '../services/api';
 import { useLoad } from '../hooks/useLoad';
 import { PageTitle, ErrorBox, Loading, ActivityList, Empty } from '../components/UI';
+
 export default function Activity() {
+  
   const { data, error, loading, reload } = useLoad(personalService.activity);
+  
   return (
     <>
       <PageTitle

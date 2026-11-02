@@ -3,12 +3,14 @@ import { Link, Navigate, useLocation } from 'react-router-dom';
 import { Gamepad2, ArrowRight, ShieldCheck } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { ErrorBox } from '../components/UI';
+
 export default function Auth({ register = false }) {
   const { user, login, register: signup } = useAuth(),
     location = useLocation();
   const [error, setError] = useState(''),
     [busy, setBusy] = useState(false);
   if (user) return <Navigate to={location.state?.from || '/'} replace />;
+  
   async function submit(e) {
     e.preventDefault();
     setBusy(true);
@@ -22,6 +24,7 @@ export default function Auth({ register = false }) {
       setBusy(false);
     }
   }
+  
   return (
     <div className="auth-layout">
       <section className="auth-intro">

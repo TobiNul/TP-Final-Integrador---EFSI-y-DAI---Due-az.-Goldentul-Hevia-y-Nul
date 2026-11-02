@@ -5,9 +5,11 @@ import { useAuth } from '../context/AuthContext';
 import { useLoad } from '../hooks/useLoad';
 import { catalogService, personalService } from '../services/api';
 import { SectionTitle, ErrorBox, Loading, ActivityList, Cover, Empty } from '../components/UI';
+
 export default function Home() {
   const { user } = useAuth(),
     catalog = useLoad(catalogService.list);
+  
   const loader = useCallback(
     () =>
       user
@@ -20,12 +22,15 @@ export default function Home() {
         : Promise.resolve(null),
     [user],
   );
+  
   const personal = useLoad(loader),
     [library = [], collections = [], stats = {}, activity = []] = personal.data || [];
+  
   const featured = catalog.data?.[0],
     favorites = library.filter((g) => g.esFavorito),
     completed = library.filter((g) => g.estado === 'Terminado');
-  function gameRows(games) {
+  
+  function gameRows(games) {  
     return games.slice(0, 3).map((g) => (
       <Link className="home-game-row" to={'/juego/' + g.idExterno} key={g.id}>
         <Cover src={g.portadaUrl} title={g.titulo} />
@@ -39,6 +44,7 @@ export default function Home() {
       </Link>
     ));
   }
+  
   return (
     <>
       <div className="page-title home-title">
@@ -114,6 +120,7 @@ export default function Home() {
             {collections.length ? (
               collections.slice(0, 3).map((c) => {
                 const first = library.find((g) => c.juegos.includes(g.id));
+                
                 return (
                   <Link
                     className="home-game-row"

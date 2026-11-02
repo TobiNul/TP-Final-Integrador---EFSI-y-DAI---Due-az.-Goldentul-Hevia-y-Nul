@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { authService } from '../services/api';
+
 const AuthContext = createContext(null);
+
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(null),
     [loading, setLoading] = useState(true),
@@ -25,21 +27,26 @@ export function AuthProvider({ children }) {
       window.removeEventListener('session-expired', expired);
     };
   }, []);
+  
   async function login(data) {
     setUser(await authService.login(data));
     setError('');
   }
+  
   async function register(data) {
     setUser(await authService.register(data));
     setError('');
   }
+  
   async function logout() {
     await authService.logout();
     setUser(null);
   }
+  
   async function update(data) {
     setUser(await authService.update(data));
   }
+  
   return (
     <AuthContext.Provider value={{ user, loading, error, login, register, logout, update }}>
       {children}

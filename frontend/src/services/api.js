@@ -1,9 +1,11 @@
 import axios from 'axios';
+
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
   withCredentials: true,
   timeout: 25000,
 });
+
 api.interceptors.response.use(
   (r) => r,
   (error) => {
@@ -14,7 +16,9 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
 export const get = async (path, config) => (await api.get(path, config)).data;
+
 export const authService = {
   me: () => get('/auth/me'),
   login: async (data) => (await api.post('/auth/login', data)).data,
@@ -22,10 +26,12 @@ export const authService = {
   logout: () => api.post('/auth/logout'),
   update: async (data) => (await api.patch('/auth/me', data)).data,
 };
+
 export const catalogService = {
   list: (params, signal) => get('/games', { params, signal }),
   detail: (id, signal) => get('/games/' + id, { signal }),
 };
+
 export const personalService = {
   library: () => get('/library'),
   collections: () => get('/collections'),

@@ -5,8 +5,10 @@ import { Plus, Heart, Search } from 'lucide-react';
 import { personalService } from '../services/api';
 import { useLoad } from '../hooks/useLoad';
 import { PageTitle, GameGrid, ErrorBox, Loading, Empty } from '../components/UI';
+
 export default function Library({ favorites = false }) {
   const { data, error, loading, reload } = useLoad(personalService.library);
+  
   const [filter, setFilter] = useState('Todos'),
     [query, setQuery] = useState(''),
     [sort, setSort] = useState('recent');
@@ -16,9 +18,12 @@ export default function Library({ favorites = false }) {
       (filter === 'Todos' || g.estado === filter) &&
       g.titulo.toLowerCase().includes(query.toLowerCase()),
   );
+  
   if (sort === 'title') games = [...games].sort((a, b) => a.titulo.localeCompare(b.titulo));
+  
   if (sort === 'rating')
     games = [...games].sort((a, b) => (b.puntuacion || 0) - (a.puntuacion || 0));
+  
   return (
     <>
       <PageTitle

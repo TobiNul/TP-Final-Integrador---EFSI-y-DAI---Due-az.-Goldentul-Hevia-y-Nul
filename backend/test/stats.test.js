@@ -1,11 +1,16 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { statistics } from '../src/stats.js';
+
 test('estadísticas vacías no producen NaN ni porcentajes ficticios', () => {
   const s = statistics([]);
+  
   assert.equal(s.total, 0);
+  
   assert.equal(s.average, 0);
+  
   assert.equal(s.completion, 0);
+  
   assert.deepEqual(s.genres, []);
 });
 test('estadísticas cambian con puntuaciones, estados, horas y preferencias reales', () => {
@@ -39,6 +44,7 @@ test('estadísticas cambian con puntuaciones, estados, horas y preferencias real
     },
   ];
   const s = statistics(items, 2);
+  
   assert.equal(s.total, 3);
   assert.equal(s.completed, 1);
   assert.equal(s.playing, 1);
@@ -50,6 +56,8 @@ test('estadísticas cambian con puntuaciones, estados, horas y preferencias real
   assert.equal(s.favorites, 2);
   assert.equal(s.collections, 2);
   assert.deepEqual(s.platforms[0], { name: 'PC', value: 2 });
+  
   items[1].estado = 'Terminado';
+  
   assert.equal(statistics(items).completion, 67);
 });
