@@ -22,7 +22,7 @@ export async function items(user) {
 
 export async function saveGame(db, g) {
   const { rows } = await db.query(
-    'INSERT INTO videojuegos ("proveedorApi","idExterno",titulo,descripcion,"portadaUrl",imagen,generos,plataformas,"fechaLanzamiento","puntuacionApi",desarrolladora) VALUES (\'igdb\',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT ("proveedorApi","idExterno") DO UPDATE SET titulo=EXCLUDED.titulo, descripcion=EXCLUDED.descripcion,"portadaUrl"=EXCLUDED."portadaUrl",imagen=EXCLUDED.imagen,generos=EXCLUDED.generos,plataformas=EXCLUDED.plataformas RETURNING "idVideojuego"',
+    'INSERT INTO videojuegos ("proveedorApi","idExterno",titulo,descripcion,"portadaUrl",imagen,generos,plataformas,"fechaLanzamiento","puntuacionApi",desarrolladora) VALUES ($11,$1,$2,$3,$4,$5,$6,$7,$8,$9,$10) ON CONFLICT ("proveedorApi","idExterno") DO UPDATE SET titulo=EXCLUDED.titulo, descripcion=EXCLUDED.descripcion,"portadaUrl"=EXCLUDED."portadaUrl",imagen=EXCLUDED.imagen,generos=EXCLUDED.generos,plataformas=EXCLUDED.plataformas RETURNING "idVideojuego"',
     [
       String(g.id),
       g.titulo,
@@ -34,6 +34,7 @@ export async function saveGame(db, g) {
       g.fechaLanzamiento,
       g.puntuacionApi,
       g.desarrolladora,
+      process.env.CATALOGO === 'omdb' ? 'omdb' : 'igdb',
     ],
   );
   return rows[0].idVideojuego;

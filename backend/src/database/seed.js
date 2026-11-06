@@ -2,7 +2,7 @@ import 'dotenv/config';
 import bcrypt from 'bcrypt';
 import { pool, transaction, activity } from './pool.js';
 import { saveGame } from '../library.js';
-import { games } from '../igdb.js';
+import { games, game } from '../igdb.js';
 const titles = [
   'Elden Ring',
   'The Witcher 3: Wild Hunt',
@@ -33,8 +33,8 @@ try {
     const results = await games({ q: title });
     const found = results.find((g) => g.titulo.toLowerCase() === title.toLowerCase());
     if (!found)
-      throw new Error('IGDB no devolvió el título exacto: ' + title + '. No se cargaron datos.');
-    catalog.push(found);
+      throw new Error((process.env.CATALOGO === 'omdb' ? 'OMDb' : 'IGDB') + ' no devolvió el título exacto: ' + title + '. No se cargaron datos.');
+    catalog.push(process.env.CATALOGO === 'omdb' ? await game(found.id) : found);
   }
   const hash = await bcrypt.hash(process.env.DEMO_PASSWORD, 12);
   await transaction(async (db) => {

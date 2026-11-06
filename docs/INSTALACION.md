@@ -11,6 +11,10 @@ Requisitos: Node.js 22.12 o superior y una base PostgreSQL 16 o superior. El ser
 5. Registrar una aplicación confidencial en el portal de desarrolladores de Twitch y configurar TWITCH_CLIENT_ID y TWITCH_CLIENT_SECRET. Ver https://api-docs.igdb.com/#account-creation.
 6. Elegir DEMO_PASSWORD con al menos 8 caracteres para la cuenta de demostración.
 
+### Sin acceso a IGDB/Twitch (red del colegio): OMDb
+
+Pedir una key gratis en https://www.omdbapi.com/apikey.aspx (llega por mail y hay que activarla con el link) y poner CATALOGO=omdb y OMDB_API_KEY=<la key> en backend/.env. OMDb tiene juegos con póster, sinopsis, género y puntaje de IMDb, pero no plataformas ni desarrolladoras. Solo permite buscar por texto, así que Explorar sin búsqueda muestra los juegos de OMDb guardados en la base, ordenados por cuántos usuarios los tienen (con una base nueva queda vacío hasta que alguien agregue juegos o se corra el seed). La búsqueda trae 10 resultados por página y el filtro de género no aplica. Límite: 1000 consultas por día con la key gratis.
+
 Desde backend:
 
 ```sh

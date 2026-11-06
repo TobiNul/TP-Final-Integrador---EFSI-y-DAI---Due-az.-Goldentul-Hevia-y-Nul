@@ -1,4 +1,8 @@
 import { fail, id } from './errors.js';
+import { omdbGames, omdbGame } from './omdb.js';
+
+// CATALOGO=omdb usa OMDb; vacío usa IGDB con credenciales de Twitch.
+const mode = () => process.env.CATALOGO;
 
 let access,
   expiration = 0,
@@ -94,6 +98,7 @@ const fields =
   'fields name,summary,cover.url,screenshots.url,genres.name,platforms.name,first_release_date,total_rating,involved_companies.developer,involved_companies.company.name;';
 
 export async function games({ q = '', sort = 'rating', genre = '', page = 1 } = {}) {
+  if (mode() === 'omdb') return omdbGames({ q, sort, genre, page });
   if (typeof q !== 'string' || q.length > 100)
     fail(400, 'La búsqueda admite hasta 100 caracteres.');
   if (genre && !/^\d{1,6}$/.test(genre)) fail(400, 'Género inválido.');
@@ -124,6 +129,7 @@ export async function games({ q = '', sort = 'rating', genre = '', page = 1 } = 
 }
 
 export async function game(idValue) {
+  if (mode() === 'omdb') return omdbGame(idValue);
   const data = await request(fields + 'where id = ' + id(idValue) + '; limit 1;');
   if (!data[0]) fail(404, 'No encontramos ese juego en IGDB.');
   return normalize(data[0]);
