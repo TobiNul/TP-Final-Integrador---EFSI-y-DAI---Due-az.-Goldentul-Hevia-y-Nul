@@ -1,3 +1,4 @@
+import './configs/system-certs.js';
 import { fail, id } from './errors.js';
 import { omdbGames, omdbGame } from './omdb.js';
 

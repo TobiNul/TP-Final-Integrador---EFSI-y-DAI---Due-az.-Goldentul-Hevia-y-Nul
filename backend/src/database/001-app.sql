@@ -1,4 +1,5 @@
 BEGIN;
+SET LOCAL search_path TO public;
 CREATE TABLE IF NOT EXISTS usuarios ("idUsuario" integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, username varchar(40) UNIQUE NOT NULL, email varchar(255) UNIQUE NOT NULL, "passwordHash" text NOT NULL, "nombreCompleto" varchar(120), "fotoPerfil" text, biografia text, "fechaCreacion" timestamptz NOT NULL DEFAULT now());
 ALTER TABLE usuarios ADD COLUMN IF NOT EXISTS preferencias text[] NOT NULL DEFAULT '{}';
 CREATE TABLE IF NOT EXISTS videojuegos ("idVideojuego" integer GENERATED ALWAYS AS IDENTITY PRIMARY KEY, "proveedorApi" varchar(50) NOT NULL, "idExterno" varchar(100) NOT NULL, titulo varchar(255) NOT NULL, descripcion text, "portadaUrl" text, "fechaLanzamiento" date, desarrolladora varchar(255), publisher varchar(255), "puntuacionApi" numeric(4,2), "fechaActualizacionApi" timestamptz, UNIQUE ("proveedorApi","idExterno"));
