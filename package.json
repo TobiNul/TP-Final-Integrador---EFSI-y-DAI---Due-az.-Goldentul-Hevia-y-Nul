@@ -1,0 +1,12 @@
+{
+  "name": "gamer-republic-root",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "postinstall": "node scripts/setup.js",
+    "dev": "concurrently -n back,front -c blue,magenta \"npm run dev --prefix backend\" \"npm run dev --prefix frontend\""
+  },
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
