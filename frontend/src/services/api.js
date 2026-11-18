@@ -29,7 +29,7 @@ export const authService = {
 
 export const catalogService = {
   list: (params, signal) => get('/games', { params, signal }),
-  detail: (id, signal) => get('/games/' + id, { signal }),
+  detail: (id, signal) => get('/games/' + encodeURIComponent(id), { signal }),
 };
 
 export const personalService = {
